@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <Pattern>
+                %d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n
+            </Pattern>
+        </layout>
+    </appender>
+
+    <appender name="SPLUNK1" class="com.splunk.logging.HttpEventCollectorLogbackAppender">
+        <url>http://localhost:8088</url>
+        <index>test_123</index>
+        <token>2d36261e-a4a4-4ffd-8240-c4e5692ce4f4</token>
+        <disableCertificateValidation>true</disableCertificateValidation>
+        <batch_size_count>1</batch_size_count>
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <pattern>%msg</pattern>
+        </layout>
+    </appender>
+    <appender name="SPLUNK2" class="com.splunk.logging.HttpEventCollectorLogbackAppender">
+        <url>http://localhost:8088</url>
+        <index>main</index>
+        <token>6f78599b-244e-44b6-b0e9-ec4217765fa6</token>
+        <disableCertificateValidation>true</disableCertificateValidation>
+        <batch_size_count>1</batch_size_count>
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <pattern>%msg</pattern>
+        </layout>
+    </appender>
+    <logger name="http" level="info" additivity="false">
+        <appender-ref ref="SPLUNK2"/>
+    </logger>
+    <logger name="testhttp" level="info" additivity="false">
+        <appender-ref ref="SPLUNK1"/>
+    </logger>
+    <logger name="systemout" level="debug">
+        <appender-ref ref="STDOUT"/>
+    </logger>
+    <root level="INFO">
+        <appender-ref ref="STDOUT"/>
+    </root>
+</configuration>
